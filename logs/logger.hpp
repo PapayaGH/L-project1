@@ -220,6 +220,11 @@ namespace ppalog
                 LogSink::ptr psink=SinkFactory::create<SinkType>(std::forward<Args>(args)...);
                 _sinks.push_back(psink);
             }
+            //支持传入已创建好的落地实例（便于外部持有并查询 FileSink 的运行期统计）
+            void buildSink(LogSink::ptr psink)
+            {
+                if(psink) _sinks.push_back(psink);
+            }
             virtual  Logger::ptr build()=0;
         protected:
             AsyncType _looper_type;
