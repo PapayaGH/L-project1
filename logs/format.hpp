@@ -120,7 +120,10 @@ namespace ppalog
             Formatter(const std::string &pattern="[%d{%H:%M:%S}][%t][%p][%c][%f:%l] %m%n"):
              _pattern(pattern)  
              {
-               assert(parsePattern()==true);
+               //修复：解析必须无条件执行，assert 只检查返回值。
+               //否则 -DNDEBUG 下整行被裁掉，_items 为空，所有日志输出为空。
+               bool ok=parsePattern();
+               assert(ok);(void)ok;
              }
              //格式化日志消息
              void format(std::ostream &out,const LogMsg &msg)
